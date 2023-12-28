@@ -1,0 +1,104 @@
+/* Import external styles */
+@import '@vuepic/vue-datepicker/dist/main.css';
+@import 'v-tooltip/dist/v-tooltip.css';
+@import "vue-toastification/dist/index.css";
+
+/* Import icons css */
+@import url('https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'CeraProBold';
+    src: url('../../public/fonts/cera-pro/Cera_Pro_Bold.otf') format('opentype');
+}
+@font-face {
+    font-family: 'CeraProLight';
+    src: url('../../public/fonts/cera-pro/Cera_Pro_Light.otf') format('opentype');
+}
+@font-face {
+    font-family: 'CeraProMedium';
+    src: url('../../public/fonts/cera-pro/Cera_Pro_Medium.otf') format('opentype');
+}
+
+
+html, body, #app{
+    min-height: 100%;
+    font-weight: 500;
+    color: '#0f172a';
+    font-family: 'CeraProMedium', sans-serif;
+}
+
+/* Tooltip Styles */
+.v-popper__inner{
+    padding: 0.3rem 0.9rem !important;
+    max-width: 300px !important;
+    background-color: #000 !important;
+    word-wrap: break-word;
+    font-size: 0.7rem !important;
+}
+
+.v-popper__arrow-outer{
+    display: none !important;
+}
+
+.v-popper__popper {
+    display: block !important;
+    z-index: 999999 !important;
+}
+
+/* Custom style for Multiselect */
+.multiselect__single{
+    font-size: 14px !important;
+}
+
+.multiselect__tags{
+    border:1px solid #e1e1e1 !important;
+}
+
+.multiselect__option--highlight, .multiselect__option--highlight::after, .multiselect__tag{
+    background: var(--selectBg, #020c7E) !important;
+}
+
+.multiselect__input, .multiselect{
+    font-size: 14px !important;
+}
+
+.multiselect__tag-icon::after{
+    color: #fff !important;
+}
+
+.multiselect__input:focus{
+    box-shadow: none
+}
+
+.multiselect__placeholder{
+    color: #1f2937 !important;
+}
+
+.custom-css .multiselect__tags, .custom-css .multiselect__single, .custom-css .multiselect__content-wrapper, .custom-css .multiselect__input, .custom-css .multiselect__placeholder{
+    background: var(--selectBg, #1F2937) !important;
+    color: #fff !important;
+}
+.custom-css .multiselect__tags{
+    border: 1px solid #4B5563 !important;
+}
+
+/* Custom Style for Datepicker */
+.dp__theme_light {
+    --dp-primary-color: var(--selectBg, #020c7E);
+    --dp-font-size: 0.875rem;
+}
+
+.dp__input{
+    border: 1px solid var(--selectBg, #020c7E) !important;
+}
+
+
+.dp__main, .dp__input, .dp__menu, .dp__calendar_wrap, .dp__overlay, .dp__time_input{
+    font-family: inherit !important;
+}
