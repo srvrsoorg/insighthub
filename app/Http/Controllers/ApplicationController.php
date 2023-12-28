@@ -169,7 +169,7 @@ class ApplicationController extends Controller
         try {
 
             $accessLogs = $application->accessLogs()
-                ->select('ip', 'time', 'method', 'url', 'status', 'bytes', 'referrer_url', 'browser', 'bot_name', 'is_bot_request', 'created_at')
+                ->select('ip', 'time', 'method', 'url', 'status', DB::raw('bytes/ (1024 * 1024) as bytes'), 'referrer_url', 'browser', 'bot_name', 'is_bot_request', 'created_at')
                 ->whereBetween('created_at', $this->dateRange)
                 ->when(request()->get('bot') != "", function ($query) {
                     $query->where('is_bot_request', request()->get('bot')); // Apply bot status filter if provided
