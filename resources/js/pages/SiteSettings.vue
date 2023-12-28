@@ -176,6 +176,10 @@
                     </div>
                 </form>
             </div>
+            <div class="bg-red-100 text-red-600 rounded px-4 py-2 mt-4 text-sm flex items-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                After the final setup, Your data processing can take 24-48 hours depending on the number and size of your log files.
+            </div>
         </div>
     </div>
 </template>
@@ -197,7 +201,7 @@ export default{
                 favicon: null,
                 color_code: '020C7E',
                 retention_period: '',
-                redis_password: null
+                redis_password: ''
             },
             favicon: null,
             logo: null,

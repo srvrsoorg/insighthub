@@ -35,7 +35,7 @@ class SiteSettingController extends Controller
             'favicon' => 'nullable|mimes:jpeg,jpg,png,ico',
             'color_code' => ['required','regex:/^([a-f0-9]{6}|[a-f0-9]{3})$/i'],
             'retention_period' => 'nullable|numeric|min:7',
-            'redis_password' => 'nullable|string'
+            'redis_password' => 'required|string'
         ]);
 
         try {
