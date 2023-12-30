@@ -142,8 +142,8 @@ class UsageController extends Controller
             // Simplified mapping logic for chart data
             $data = $usages->map(function ($usage) use($server) {
                 return [
-                    'five_min_load' => $usage->calculated_five_min_load,
-                    'fifteen_min_load' => $usage->calculated_fifteen_min_load,
+                    'five_min_load' => round($usage->calculated_five_min_load,2),
+                    'fifteen_min_load' => round($usage->calculated_fifteen_min_load,2),
                     'cores' => $server->cores,
                     'datetime' => $usage->datetime,
                 ];
