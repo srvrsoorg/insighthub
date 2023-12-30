@@ -103,7 +103,7 @@ class UsageController extends Controller
         try {
             // Fetch server usage within the date range for chart data
             $usages = $server->usages()
-                ->selectRaw("MAX(fifteen_min_load) as cpu_usage, MAX(memory_in_pr) as memory_usage, MAX(disk_in_pr) as disk_usage, MAX(swap_in_pr) as swap_usage, DATE_FORMAT(created_at,'%m/%d/%Y %H:%i') as datetime")
+                ->selectRaw("ROUND(MAX(fifteen_min_load), 2) as cpu_usage, ROUND(MAX(memory_in_pr), 2) as memory_usage, ROUND(MAX(disk_in_pr), 2) as disk_usage, ROUND(MAX(swap_in_pr), 2) as swap_usage, DATE_FORMAT(created_at,'%m/%d/%Y %H:%i') as datetime")
                 ->whereBetween('created_at', $this->dateRange)
                 ->groupBy(DB::raw('DATE_FORMAT(created_at, "%m/%d/%Y %H:%i")'))
                 ->orderBy('datetime', 'ASC')
