@@ -119,7 +119,7 @@ class ReferrerController extends Controller
                 $query->where('is_bot_request', request()->get('bot')); // Apply bot status filter if provided
             })
             ->groupBy('date')
-            ->orderBy('date')
+            ->orderBy('created_at')
             ->get();
 
         // Return the retrieved Referrer data in a JSON response

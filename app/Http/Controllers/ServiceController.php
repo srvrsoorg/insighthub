@@ -69,7 +69,7 @@ class ServiceController extends Controller
                 ->where('name', $service)
                 ->whereBetween('created_at', $dateRange)
                 ->groupBy('datetime')
-                ->orderBy('datetime', 'asc')
+                ->orderBy('created_at')
                 ->get();
 
             // Respond with the latest services
