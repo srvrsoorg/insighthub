@@ -60,7 +60,7 @@ class StatusController extends Controller
                 ->when(request()->get('bot') != "", function ($query) {
                     $query->where('is_bot_request', request()->get('bot')); // Apply bot status filter if provided
                 })
-                ->orderBy('datetime', 'ASC')->get();
+                ->orderBy('created_at', 'ASC')->get();
 
             // Group the results by date and count status values
             $groupedLogs = $statuses->groupBy('datetime');

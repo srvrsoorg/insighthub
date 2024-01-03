@@ -208,7 +208,7 @@ class ApplicationController extends Controller
                     $query->where('is_bot_request', request()->get('bot')); // Apply bot status filter if provided
                 })
                 ->groupBy('date')
-                ->orderBy('date')
+                ->orderBy('created_at')
                 ->get();
 
             // Respond with the details of the user's server

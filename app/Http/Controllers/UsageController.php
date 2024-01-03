@@ -106,7 +106,7 @@ class UsageController extends Controller
                 ->selectRaw("ROUND(MAX(fifteen_min_load), 2) as cpu_usage, ROUND(MAX(memory_in_pr), 2) as memory_usage, ROUND(MAX(disk_in_pr), 2) as disk_usage, ROUND(MAX(swap_in_pr), 2) as swap_usage, DATE_FORMAT(created_at,'%m/%d/%Y %H:%i') as datetime")
                 ->whereBetween('created_at', $this->dateRange)
                 ->groupBy(DB::raw('DATE_FORMAT(created_at, "%m/%d/%Y %H:%i")'))
-                ->orderBy('datetime', 'ASC')
+                ->orderBy('created_at')
                 ->get();
 
             // Return server usage chart data as JSON response
@@ -136,7 +136,7 @@ class UsageController extends Controller
                 ->selectRaw("DATE_FORMAT(created_at, '%m/%d/%Y %H:%i') as datetime")
                 ->whereBetween('created_at', $this->dateRange)
                 ->groupBy('datetime')
-                ->orderBy('datetime', 'ASC')
+                ->orderBy('created_at')
                 ->get();
 
             // Simplified mapping logic for chart data
