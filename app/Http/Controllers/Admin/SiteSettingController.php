@@ -114,6 +114,7 @@ class SiteSettingController extends Controller
             \Artisan::call("env:set cache_driver redis");
             \Artisan::call("env:set queue_connection redis");
             \Artisan::call("queue:restart");
+            \Artisan::call("horizon:terminate");
 
             // ✅ Success response: Return site setting and a success message
             return response()->json([
