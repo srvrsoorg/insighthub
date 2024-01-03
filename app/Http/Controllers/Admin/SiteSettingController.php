@@ -113,6 +113,7 @@ class SiteSettingController extends Controller
             \Artisan::call("env:set redis_password {$request->redis_password}");
             \Artisan::call("env:set cache_driver redis");
             \Artisan::call("env:set queue_connection redis");
+            \Artisan::call("queue:restart");
 
             // ✅ Success response: Return site setting and a success message
             return response()->json([
