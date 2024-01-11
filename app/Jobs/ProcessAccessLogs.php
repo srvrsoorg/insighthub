@@ -146,6 +146,9 @@ class ProcessAccessLogs implements ShouldQueue
                 return $this->getLog($application->server, $application, $formData);
 
             } else {
+                
+                $formData['type'] = "fullLogs";
+
                 // If no existing access log, prepare data for fetching full logs
                 // Call the getLog method with the prepared data
                 return $this->getLog($application->server, $application, $formData);
