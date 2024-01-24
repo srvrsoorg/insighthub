@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\DateTime;
 use App\Models\Summary\{Bandwidth, Bot, Browser, Device, Ip, Method, MimeType, Platform, PlatformVersion, Protocol, Status, Url, Referrer};
+use Cache;
 
 class Application extends Model
 {
@@ -35,31 +36,22 @@ class Application extends Model
     // Hidden fields (not serialized when converted to JSON)
     protected $hidden = ['pivot'];
 
-    const CACHE_KEYS = [
-        "userApp" => "user-applications",
-        "cronApp" => "cronjob-applications"
-    ];
-
-    protected static function booted()
+    /**
+     * Boot method to handle model events.
+     */
+    protected static function boot()
     {
-        static::created(function(){
-            static::clearCache();
+        parent::boot();
+
+        // Clear cache when UserServer is saved or updated
+        static::saved(function () {
+            Cache::flush();
         });
 
-        static::updated(function(){
-            static::clearCache();
+        // Clear cache when UserServer is deleted
+        static::deleted(function () {
+            Cache::flush();
         });
-
-        static::deleted(function(){
-            static::clearCache();
-        });
-    }
-
-    protected static function clearCache()
-    {
-        foreach(static::CACHE_KEYS as $key){
-            \Cache::forget($key);
-        }
     }
 
     // Define a relationship with the Server model

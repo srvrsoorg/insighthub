@@ -26,8 +26,9 @@
         </div>
         <Table class="mt-5" :head="thead" v-if="applications.length > 0">
             <tr class="even:bg-slate-50 last:border-0 border-b border-gray-300 " v-for="application in applications" :key="application.id">
-                <td class="whitespace-nowrap py-4 px-4 text-sm">
-                    {{ currentServer.name }} ({{ currentServer.ip }})
+                <td class="whitespace-nowrap py-4 px-4 text-sm flex flex-col gap-1">
+                    <span>{{ currentServer.name }}</span>
+                    <span>({{ currentServer.ip }})</span>
                 </td>
                 <td class="whitespace-nowrap py-4 px-4 text-sm">
                     {{ application.name }}
@@ -57,6 +58,27 @@
                 <td class="whitespace-nowrap py-4 px-4 text-sm text-center">
                     {{application.size}}
                 </td>
+                <td class="whitespace-nowrap py-4 px-4 text-sm text-center">
+                    <Switch 
+                        v-model="application.enable" 
+                        @update:model-value="toggleApplication(application)"
+                        :class="['relative inline-flex h-5 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out', application.enable ? 'bg-custom-500' : 'bg-gray-300']"
+                    >
+                        <span aria-hidden="true" :class="[application.enable ? 'translate-x-6' : 'translate-x-0', 'pointer-events-none inline-block h-4 w-4 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out']" />
+                    </Switch>
+                </td>
+                <td class="whitespace-nowrap py-4 px-4 text-sm text-center">
+                    <select
+                        :disabled="!application.enable"
+                        v-model="application.priority"
+                        @change="changePriority(application)"
+                        class="w-fit placeholder:font-italitc text-sm border focus:ring-0 rounded-md py-1.5 focus:outline-none"
+                    >
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                </td>
             </tr>
             <template #pagination>
                 <div class="flex flex-wrap gap-3 justify-end border-t px-4 py-2.5" v-if="pagination.total > pagination.per_page">
@@ -65,10 +87,10 @@
             </template> 
         </Table>
         <template v-else>
-            <TableSkeleton class="mt-5" :heads="8" v-if="refreshing || loading"/>
+            <TableSkeleton class="mt-5" :heads="10" v-if="refreshing || loading"/>
             <Table class="mt-5" :head="thead" v-else>
                 <tr>
-                    <td colspan="8" class="text-center text-sm px-6 py-4">
+                    <td colspan="10" class="text-center text-sm px-6 py-4">
                         {{
                             refreshing ? "Please Wait" : "No Data Found"
                         }}
@@ -80,7 +102,8 @@
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
+import { Switch } from '@headlessui/vue'
+
 export default{
     data(){
         return{
@@ -94,7 +117,9 @@ export default{
                 {title: 'PHP Version', classes: 'text-center'},
                 {title: 'Status', classes: 'text-center'},
                 {title: 'SSL', classes: 'text-center'},
-                {title: 'Size (MB)', classes: 'text-center'}
+                {title: 'Size (MB)', classes: 'text-center'},
+                {title: 'Monitor Log', classes: 'text-center', tooltip: 'Enabling this option allows the application to fetch logs for monitoring.'},
+                {title: 'Log Priority', classes: 'text-center', tooltip: 'Set application priority for log fetching, choosing between High (10 minutes), Medium (20 minutes), and Low (30 minutes).'}
             ],
             query: {
                 search: ''
@@ -104,6 +129,9 @@ export default{
             pagination: null,
             refreshing: false,
         }
+    },
+    components: {
+        Switch
     },
     created(){
         this.verifyApi(this.fetchServers)
@@ -144,6 +172,32 @@ export default{
                 this.$toast.error(data.message);
             }).finally(() => {
                 this.refreshing = false
+            })
+        },
+        async changePriority(application){
+            let url = `/admin/servers/${this.currentServerId}/applications/${application.id}/update-priority`
+
+            await this.$axios.patch(url, {
+                priority: application.priority
+            }).then(({data}) => {
+                this.$toast.success(data.message)
+            }).catch(({ response: { data } }) => {
+                this.$toast.error(data.message);
+            }).finally(() => {
+                this.fetchApplication()
+            })
+        },
+        async toggleApplication(application){
+            let url = `/admin/servers/${this.currentServerId}/applications/${application.id}/update-enable`
+
+            await this.$axios.patch(url, {
+                enable: application.enable ? true : false
+            }).then(({data}) => {
+                this.$toast.success(data.message)
+            }).catch(({ response: { data } }) => {
+                this.$toast.error(data.message);
+            }).finally(() => {
+                this.fetchApplication()
             })
         }
     }

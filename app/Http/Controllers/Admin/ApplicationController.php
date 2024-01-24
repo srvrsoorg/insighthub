@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Server;
+use App\Models\Application;
 use Illuminate\Validation\Rule;
 
 class ApplicationController extends Controller
@@ -51,7 +52,7 @@ class ApplicationController extends Controller
      * @param  Application  $application
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updateEnable(Request $request, Application $application)
+    public function updateEnable(Request $request, Server $server, Application $application)
     {
         // Validate the request data
         $request->validate([
@@ -85,7 +86,7 @@ class ApplicationController extends Controller
      * @param  Application  $application
      * @return \Illuminate\Http\JsonResponse
      */
-    public function updatePriority(Request $request, Application $application)
+    public function updatePriority(Request $request, Server $server, Application $application)
     {
         // Validate the request data
         $request->validate([
