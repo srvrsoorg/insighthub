@@ -61,7 +61,10 @@ Route::middleware(['auth:api', 'adminOnly'])->prefix('admin')->group(function ()
     // Application routes within a server context
     Route::controller(ApplicationController::class)->prefix('/servers/{server}/applications')->group(function () {
         Route::get('/', 'index');  // Get applications for a server
-    });
+        // update enable or priority
+        Route::patch('/{application}/update-enable', 'updateEnable');
+        Route::patch('/{application}/update-priority', 'updatePriority');
+        });
 
     // User routes (admin-only)
     Route::controller(UserController::class)->prefix('users')->group(function () {

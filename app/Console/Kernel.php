@@ -20,7 +20,8 @@ class Kernel extends ConsoleKernel
         ->when(\Cache::has($app_random_ids_cache_key), function ($query) use ($app_random_ids_cache_key) {
             $query->whereNotIn("id", \Cache::get($app_random_ids_cache_key));
         })
-        ->select('id', 'server_id')
+        ->where('enable', true)
+        ->select('id', 'server_id', 'priority')
         ->inRandomOrder()
         ->take((int)config("insighthub.max_cronjob_application"))
         ->get();
@@ -34,7 +35,11 @@ class Kernel extends ConsoleKernel
 
 
         foreach ($applications as $application) {
-            $schedule->command("execute:access-logs {$application->id}")->cron("*/10 * * * *")->withoutOverlapping();
+            $cronFrequency = $this->getCronFrequency($application->priority);
+
+            $schedule->command("execute:access-logs {$application->id}")
+                ->cron($cronFrequency)
+                ->withoutOverlapping();
         }
 
         $schedule->command('execute:server-status')->cron('*/7 * * * *');
@@ -56,5 +61,25 @@ class Kernel extends ConsoleKernel
         $this->load(__DIR__.'/Commands');
 
         require base_path('routes/console.php');
+    }
+
+    /**
+     * Get cron frequency based on application priority.
+     *
+     * @param string $priority
+     * @return string
+     */
+    protected function getCronFrequency($priority): string
+    {
+        switch ($priority) {
+            case 'high':
+                return '*/10 * * * *'; // Every 10 minutes
+            case 'medium':
+                return '*/20 * * * *'; // Every 20 minutes
+            case 'low':
+                return '*/30 * * * *'; // Every 30 minutes
+            default:
+                return '*/10 * * * *'; // Default to every 10 minutes if priority is not recognized
+        }
     }
 }

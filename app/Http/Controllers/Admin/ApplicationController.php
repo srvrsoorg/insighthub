@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Server;
+use Illuminate\Validation\Rule;
 
 class ApplicationController extends Controller
 {
@@ -39,6 +40,73 @@ class ApplicationController extends Controller
             report($e);
             return response()->json([
                 'message' => "Something went wrong."
+            ], 500);
+        }
+    }
+
+    /**
+     * Update the 'enable' column for a specific application.
+     *
+     * @param  Request      $request
+     * @param  Application  $application
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateEnable(Request $request, Application $application)
+    {
+        // Validate the request data
+        $request->validate([
+            'enable' => 'required|boolean',
+        ]);
+
+        try {
+
+            // Update the 'enable' column
+            $application->update([
+                'enable' => $request->input('enable'),
+            ]);
+
+            // Return a JSON response for success
+            return response()->json([
+                'message' => 'Enable status updated successfully.',
+            ],200);
+        } catch (\Exception $e) {
+            // Return a JSON response for error
+            return response()->json([
+                'message' => 'Failed to update enable status.',
+                'error'   => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    /**
+     * Update the 'priority' column for a specific application.
+     *
+     * @param  Request      $request
+     * @param  Application  $application
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updatePriority(Request $request, Application $application)
+    {
+        // Validate the request data
+        $request->validate([
+            'priority' => ['required', Rule::in(['high', 'medium', 'low'])],
+        ]);
+
+        try {
+            // Update the 'priority' column
+            $application->update([
+                'priority' => $request->input('priority'),
+            ]);
+
+            // Return a JSON response for success
+            return response()->json([
+                'message' => 'Priority updated successfully.',
+            ],200);
+        } catch (\Exception $e) {
+            // Return a JSON response for error
+            return response()->json([
+                'message' => 'Failed to update priority.',
+                'error'   => $e->getMessage(),
             ], 500);
         }
     }

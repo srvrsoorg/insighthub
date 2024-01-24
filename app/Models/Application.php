@@ -24,7 +24,9 @@ class Application extends Model
         'php_version',       // Php verison
         'ssl',               // Ssl ('Custom/Automatic')
         'size',              // Application size in mb,
-        'active'            // Application status enable/disable
+        'active',            // Application status enable/disable
+        'enable',            // Applicaiton fetch log enable or not
+        'priority'          // Priority for fetch log
     ];
 
     // Dates that should be treated as date objects
